@@ -44,6 +44,8 @@ class QuestionAdapter(
         return questions!!.size
     }
 
+
+    //delete with position of word
     private fun deleteQuestionContext(position: Int) {
 
         val dialogClickListener =
