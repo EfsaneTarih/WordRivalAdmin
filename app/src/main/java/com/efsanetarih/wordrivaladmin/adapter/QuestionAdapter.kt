@@ -7,17 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.efsanetarih.wordrivaladmin.R
 import com.efsanetarih.wordrivaladmin.model.Question
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.ArrayList
 
 class QuestionAdapter(
-    var c: Context, var questions: List<Question?>?, val listener: OnItemClickListener
+    private var c: Context, var questions: List<Question?>?, val listener: OnItemClickListener
 ) : RecyclerView.Adapter<QuestionAdapter.MyViewHolder>() {
 
 
@@ -30,12 +30,12 @@ class QuestionAdapter(
         return MyViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.word.text = questions?.get(position)?.word.toString()
-        holder.answerTrue.text = questions?.get(position)?.answerTrue.toString()
+    override fun onBindViewHolder(holder: MyViewHolder, documentId: String) {
+        holder.word.text = documentId
+        holder.answerTrue.text = documentId
 
         holder.btn_delete.setOnClickListener {
-            deleteQuestionContext(position)
+            deleteQuestionContext(documentId)
 
         }
     }
@@ -46,7 +46,7 @@ class QuestionAdapter(
 
 
     //delete with position of word
-    private fun deleteQuestionContext(position: Int) {
+    private fun deleteQuestionContext(documentId: String) {
 
         val dialogClickListener =
             DialogInterface.OnClickListener { dialog, which ->
@@ -54,7 +54,7 @@ class QuestionAdapter(
                     DialogInterface.BUTTON_POSITIVE -> {
 
                         FirebaseFirestore.getInstance().collection("Questions")
-                            .whereEqualTo("word", questions?.get(position)?.word.toString()).get()
+                            .whereEqualTo(FieldPath.documentId(), documentId).get()
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     for (document in it.result!!) {
@@ -63,7 +63,7 @@ class QuestionAdapter(
                                         val listofyedek: ArrayList<Question?> =
                                             arrayListOf() // arraylist kullanarak liste yaratmak
                                         for (i in questions!!) {
-                                            if (i?.word != questions?.get(position)?.word!!) {
+                                            if (i?.documentId != documentId) {
                                                 listofyedek.add(i)
                                             }
                                         }
@@ -118,7 +118,6 @@ class QuestionAdapter(
         fun onItemClick(position: Int, data: Question?)
 
     }
-
 
 
 }
