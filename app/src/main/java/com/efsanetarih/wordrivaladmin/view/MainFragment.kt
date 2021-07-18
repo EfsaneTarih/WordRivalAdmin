@@ -90,9 +90,6 @@ class MainFragment : Fragment(), QuestionAdapter.OnItemClickListener {
 
     }
 
-
-
-
     private fun getText(data: Any): String {
         var str = ""
         if (data is EditText) {
@@ -185,13 +182,13 @@ class MainFragment : Fragment(), QuestionAdapter.OnItemClickListener {
             //loadData(getData)//showing data from
         }
     }
-    private val observerSql = Observer { getData: List<Question?>? ->
+    private val observerSql = Observer { getData: List<Question?> ->
         if (getData?.size!! > 1) {
             loadData(getData)
         }
     }
 
-    private fun loadData(data: List<Question?>?) {
+    private fun loadData(data: List<Question?>) {
         val adapter = QuestionAdapter(requireContext(), data, this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

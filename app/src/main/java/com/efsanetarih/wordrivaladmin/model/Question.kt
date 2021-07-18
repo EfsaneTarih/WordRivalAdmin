@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
 @Entity(tableName = "Questions")
 class Question {
     @PrimaryKey(autoGenerate = true)
@@ -39,6 +38,5 @@ class Question {
 
     @ColumnInfo(name = "documentId")
     var documentId: String = ""
-
 
 }

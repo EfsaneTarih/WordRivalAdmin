@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.util.ArrayList
 
 class QuestionAdapter(
-    private var c: Context, var questions: List<Question?>?, val listener: OnItemClickListener
+    private var c: Context, var questions: List<Question?>, val listener: OnItemClickListener
 ) : RecyclerView.Adapter<QuestionAdapter.MyViewHolder>() {
 
 
@@ -30,13 +30,13 @@ class QuestionAdapter(
         return MyViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, documentId: String) {
-        holder.word.text = documentId
-        holder.answerTrue.text = documentId
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.word.text = questions[position]?.word
+        holder.answerTrue.text = questions[position]?.answerTrue
 
         holder.btn_delete.setOnClickListener {
-            deleteQuestionContext(documentId)
-
+            deleteQuestionContext(questions[position]?.documentId!!)
         }
     }
 
@@ -44,10 +44,7 @@ class QuestionAdapter(
         return questions!!.size
     }
 
-
-    //delete with position of word
     private fun deleteQuestionContext(documentId: String) {
-
         val dialogClickListener =
             DialogInterface.OnClickListener { dialog, which ->
                 when (which) {
@@ -108,11 +105,11 @@ class QuestionAdapter(
             val position: Int = adapterPosition
             if (position != RecyclerView.NO_POSITION) {//validation of position item
                 listener.onItemClick(position, questions?.get(position))
-
             }
         }
 
     }
+
 
     interface OnItemClickListener {
         fun onItemClick(position: Int, data: Question?)
